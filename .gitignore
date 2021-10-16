@@ -1,0 +1,4 @@
+# C objects
+*.o
+# QtCreator settings
+CMakeLists.txt.user
