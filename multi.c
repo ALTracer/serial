@@ -2,7 +2,15 @@
 #include <sys/types.h>
 #include <unistd.h>
 
-main()
+#include <stdlib.h>
+
+#define MAX(a, b) (a>b?a:b)
+
+int open_input_source(const char * filename);
+void handle_input_from_source1(void);
+void handle_input_from_source2(void);
+
+int main()
 {
   int    fd1, fd2;  /* input sources 1 and 2 */
   fd_set readfs;    /* file descriptor set */
@@ -23,9 +31,9 @@ main()
     FD_SET(fd2, &readfs);  /* set testing for source 2 */
     /* block until input becomes available */
     select(maxfd, &readfs, NULL, NULL, NULL);
-    if (FD_ISSET(fd1))         /* input from source 1 available */
+    if (FD_ISSET(fd1, &readfs))         /* input from source 1 available */
       handle_input_from_source1();
-    if (FD_ISSET(fd2))         /* input from source 2 available */
+    if (FD_ISSET(fd2, &readfs))         /* input from source 2 available */
       handle_input_from_source2();
   }
 }

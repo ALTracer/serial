@@ -5,6 +5,8 @@
 #include <sys/signal.h>
 #include <sys/types.h>
 
+#include <stdlib.h>
+
 #define BAUDRATE B38400
 #define MODEMDEVICE "/dev/ttyS1"
 #define _POSIX_SOURCE 1 /* POSIX compliant source */
@@ -16,7 +18,7 @@ volatile int STOP=FALSE;
 void signal_handler_IO (int status);   /* definition of signal handler */
 int wait_flag=TRUE;                    /* TRUE while no signal received */
 
-main()
+int main()
 {
   int fd,c, res;
   struct termios oldtio,newtio;
@@ -29,7 +31,8 @@ main()
 
   /* install the signal handler before making the device asynchronous */
   saio.sa_handler = signal_handler_IO;
-  saio.sa_mask = 0;
+  //saio.sa_mask = 0;
+  sigemptyset(&saio.sa_mask);
   saio.sa_flags = 0;
   saio.sa_restorer = NULL;
   sigaction(SIGIO,&saio,NULL);
